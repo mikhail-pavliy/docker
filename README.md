@@ -10,9 +10,36 @@
 Создаем файл index.html с измененным содержимым
 Создаем конфиг nginx
 собираем наш образ командой
-<code>[root@selinux nginx-alpine]# sudo docker build -t otus:nginx .</code>
+<code>vagrant@ubuntu  ~  docker build -t otus:nginx ..</code>
 видим что наш docker image собран 
-<code>REPOSITORY    TAG       IMAGE ID       CREATED         SIZE
-otus          nginx     def1e027eb8e   2 minutes ago   6.99MB
+```ruby
+ vagrant@ubuntu  ~  docker images                                                                             
+REPOSITORY    TAG       IMAGE ID       CREATED         SIZE
+otus          nginx     24a86ce2c245   4 seconds ago   6.99MB
 alpine        3.12      389fef711851   7 weeks ago     5.58MB
-hello-world   latest    bf756fb1ae65   13 months ago   13.3kB </code>
+hello-world   latest    bf756fb1ae65   13 months ago   13.3kB
+```
+Далее можем запустить наш контейнер командой
+```ruby
+vagrant@ubuntu  ~  docker run -d -p 8080:8080 24a86ce2c245                                            
+a1f7b54b0ec25d7741906f60e494fb01b7f72860e81673d4459d22e757acc2c3
+```
+Смотрим, что контейнер запущен.
+```ruby
+vagrant@ubuntu  ~  docker ps                                                                                   
+CONTAINER ID   IMAGE          COMMAND                  CREATED         STATUS         PORTS                    NAMES
+a1f7b54b0ec2   24a86ce2c245   "nginx -g 'daemon of…"   8 seconds ago   Up 7 seconds   0.0.0.0:8080->8080/tcp   priceless_rubin
+```
+постучимся курлом
+```ruby
+vagrant@ubuntu  ~  curl -I http://localhost:8080                                                                
+HTTP/1.1 200 OK
+Server: nginx/1.18.0
+Date: Thu, 04 Feb 2021 15:23:13 GMT
+Content-Type: text/html
+Content-Length: 34
+Last-Modified: Thu, 04 Feb 2021 15:20:44 GMT
+Connection: keep-alive
+ETag: "601c10cc-22"
+Accept-Ranges: bytes
+```
